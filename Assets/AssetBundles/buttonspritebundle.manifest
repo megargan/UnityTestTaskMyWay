@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.0.34f1
+CRC: 2210136425
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1ef7c414642abc600470492a28db972e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9f349c36d7a6532f767333f9299b3e74
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 2d62e47a3b2a59e48e2cbcfceae06742
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/Graffiti_back.png
+Dependencies: []
