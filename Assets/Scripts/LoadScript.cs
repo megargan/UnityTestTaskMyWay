@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -13,9 +14,14 @@ public class LoadScript : MonoBehaviour
     [SerializeField] private string messageSettingsPath; //путь с json файлу с текстом сообщения
     [SerializeField] private Text welcomeTextObject; // обьект на который будет загружен текст из файла
     
+    void Start() // выполняем загрузку данных при запуске
+    {
+        StartCoroutine(LoadData());
+    }
     
     public void UpdateButtonAction() // метод вызываемый при нажатии кнопки "обновить контент"
     {
+        ShowLoadingScreen();
         StartCoroutine(LoadData());
     }
     
@@ -51,7 +57,7 @@ public class LoadScript : MonoBehaviour
         Debug.Log("load success");
 
         yield return new WaitForSeconds(1f); // задержка в 1 секунду для реалистичной загрузки
-       
+        HideLoadingScreen();
         yield break;
     }
     
@@ -98,5 +104,59 @@ public class LoadScript : MonoBehaviour
     {
         public string welcometext;
     }
+    
+    
+    
+    
+    #region LoadingScreenControll
+    
+    public CanvasGroup loadingScreenCanvasGroup; // canvasgroup загрузочного экрана
+    public float fadeDuration = 0.5f; // сколько будет длиться плавное переключение экранов
+    
+    
+    public void HideLoadingScreen() // выход из экрана загрузки
+    {
+        StartCoroutine(FadeOut());
+    }
+
+    public void ShowLoadingScreen() // вход в экран загрузки
+    {
+        StartCoroutine(FadeIn());
+    }
+    
+    private IEnumerator FadeOut()
+    {
+        float startTime = Time.time;
+
+        while (Time.time - startTime < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(1f, 0f, (Time.time - startTime) / fadeDuration);
+            loadingScreenCanvasGroup.alpha = alpha;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        loadingScreenCanvasGroup.alpha = 0f;
+
+        loadingScreenCanvasGroup.interactable = false;
+        loadingScreenCanvasGroup.blocksRaycasts = false;
+        Destroy(loadingScreenCanvasGroup.GetComponent<RotateImage>());
+    }
+    
+    private IEnumerator FadeIn()
+    {
+        loadingScreenCanvasGroup.interactable = true;
+        loadingScreenCanvasGroup.blocksRaycasts = true;
+        
+        float startTime = Time.time;
+
+        while (Time.time - startTime < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(0f, 1f, (Time.time - startTime) / fadeDuration);
+            loadingScreenCanvasGroup.alpha = alpha;
+            yield return new WaitForSeconds(0.01f);
+        }
+        loadingScreenCanvasGroup.alpha = 1f; 
+    }
+    #endregion
     
 }
