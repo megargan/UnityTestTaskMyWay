@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -10,14 +11,15 @@ public class LoadScript : MonoBehaviour
     [SerializeField] private Button[] targetButtons; // кнопки к которым будет применен спрайт после загрузки 
     [SerializeField] private CounterScript counterobject; // обьект с скриптом счетчика на котором будут обновляться данные
     [SerializeField] private string settingsPath; //путь с json файлу с сохранением
+    [SerializeField] private string savePath; //путь с json файлу с сохранением
     [SerializeField] private string messageSettingsPath; //путь с json файлу с текстом сообщения
     [SerializeField] private Text welcomeTextObject; // обьект на который будет загружен текст из файла
     
-    private static string settingsPathStatic;
+    private static string savePathStatic;
     void Start() // выполняем загрузку данных при запуске
     {
         StartCoroutine(LoadData());
-        settingsPathStatic = settingsPath;
+        savePathStatic = savePath;
     }
     
     public void UpdateButtonAction() // метод вызываемый при нажатии кнопки "обновить контент"
@@ -66,38 +68,49 @@ public class LoadScript : MonoBehaviour
     
     void LoadJsonCounter() // подгузка счета из json файла
     {
-        if (File.Exists(settingsPath))
+        try
         {
-            string json = File.ReadAllText(settingsPath);
-            CounterScript.Settings settings = JsonUtility.FromJson<CounterScript.Settings>(json);
-            counterobject.UpdateDataFromClass(settings);
+            string json = File.ReadAllText(savePath);
+            CounterScript.Settings save = JsonUtility.FromJson<CounterScript.Settings>(json);
+            counterobject.UpdateDataFromClass(save);
+            return;
         }
-        else // файл создается если его не существует
+        catch (Exception e)
         {
-            CounterScript.Settings settings = new CounterScript.Settings
+            if (File.Exists(settingsPath))
             {
-                startingNumber = 0
-            };
-            string newjson = JsonUtility.ToJson(settings);
-            File.WriteAllText(settingsPath, newjson);
+                string json = File.ReadAllText(settingsPath);
+                CounterScript.Settings settings = JsonUtility.FromJson<CounterScript.Settings>(json);
+                counterobject.UpdateDataFromClass(settings);
+                SaveJsonCounter(settings);
+            }
+            else
+            {
+                CounterScript.Settings settings = new CounterScript.Settings
+                {
+                    startingNumber = 0
+                };
+                string newjson = JsonUtility.ToJson(settings);
+                File.WriteAllText(settingsPath, newjson);
+            }
         }
     }
     
     public static void SaveJsonCounter(CounterScript.Settings counter)
     {
         string newjson = JsonUtility.ToJson(counter);
-        File.WriteAllText(settingsPathStatic, newjson);
+        File.WriteAllText(savePathStatic, newjson);
     }
-
+    
     void LoadJsonMessage()
     {
-        if (File.Exists(messageSettingsPath))
+        try
         {
             string json = File.ReadAllText(messageSettingsPath);
             MessageJson messageJson = JsonUtility.FromJson<MessageJson>(json);
             welcomeTextObject.text = messageJson.welcometext;
         }
-        else
+        catch (Exception e)
         {
             MessageJson message = new MessageJson
             {
@@ -106,6 +119,7 @@ public class LoadScript : MonoBehaviour
             string newjson = JsonUtility.ToJson(message);
             File.WriteAllText(messageSettingsPath, newjson);
         }
+        
     }
 
     class MessageJson

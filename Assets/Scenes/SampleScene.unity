@@ -846,6 +846,7 @@ MonoBehaviour:
   - {fileID: 777975039}
   counterobject: {fileID: 1045125294}
   settingsPath: Assets/GameSettings/counter.json
+  savePath: Assets/GameSettings/countersave.json
   messageSettingsPath: Assets/GameSettings/message.json
   welcomeTextObject: {fileID: 210365730}
   loadingScreenCanvasGroup: {fileID: 609584786}
