@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class LoadScript : MonoBehaviour
 {
-    [SerializeField] private string bundlepath; // путь к бандлу который нужно загрузить
+    [SerializeField] private string bundlePath; // путь к бандлу который нужно загрузить
     [SerializeField] private string spriteName; // название файла со спрайтом для кнопки
     [SerializeField] private Button[] targetButtons; // кнопки к которым будет применен спрайт после загрузки 
     
@@ -15,7 +15,7 @@ public class LoadScript : MonoBehaviour
     }
     
     
-    private Sprite sprite;
+    private Sprite _sprite;
     IEnumerator LoadData()
     {
         yield return new WaitForSeconds(0.5f);
@@ -23,15 +23,15 @@ public class LoadScript : MonoBehaviour
         AssetBundle.UnloadAllAssetBundles(true); // выгрузить все ранее загруженные бандлы чтобы была возможность загрузить их снова
         
         Debug.Log("Starting load");
-        AssetBundle bundle = AssetBundle.LoadFromFile(bundlepath);
+        AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
         if (bundle == null)
         {
             Debug.Log("can not find asset bundle");
             yield break;
         }
 
-        sprite = bundle.LoadAsset<Sprite>(spriteName);
-        if (sprite == null)
+        _sprite = bundle.LoadAsset<Sprite>(spriteName);
+        if (_sprite == null)
         {
             Debug.Log("can not load sprite from bundle");
             yield break;
@@ -39,7 +39,7 @@ public class LoadScript : MonoBehaviour
 
         foreach (Button button in targetButtons)
         {
-            button.image.sprite = sprite;
+            button.image.sprite = _sprite;
         }
         
         Debug.Log("load success");
