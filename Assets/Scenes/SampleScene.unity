@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 210365731}
   - component: {fileID: 210365730}
   m_Layer: 5
-  m_Name: CounterLabel
+  m_Name: WelcomeMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -650,6 +650,10 @@ MonoBehaviour:
   targetButtons:
   - {fileID: 1045125291}
   - {fileID: 777975039}
+  counterobject: {fileID: 1045125294}
+  settingsPath: Assets/GameSettings/counter.json
+  messageSettingsPath: Assets/GameSettings/message.json
+  welcomeTextObject: {fileID: 210365730}
 --- !u!1 &1045125289
 GameObject:
   m_ObjectHideFlags: 0
