@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,5 +28,12 @@ public class CounterScript : MonoBehaviour
     private void UpdateText() 
     {
         text.text = _count.ToString();
+    }
+    private void OnDestroy()
+    {
+        LoadScript.SaveJsonCounter(new Settings
+        {
+            startingNumber = _count
+        });
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -14,9 +13,11 @@ public class LoadScript : MonoBehaviour
     [SerializeField] private string messageSettingsPath; //путь с json файлу с текстом сообщения
     [SerializeField] private Text welcomeTextObject; // обьект на который будет загружен текст из файла
     
+    private static string settingsPathStatic;
     void Start() // выполняем загрузку данных при запуске
     {
         StartCoroutine(LoadData());
+        settingsPathStatic = settingsPath;
     }
     
     public void UpdateButtonAction() // метод вызываемый при нажатии кнопки "обновить контент"
@@ -24,7 +25,8 @@ public class LoadScript : MonoBehaviour
         ShowLoadingScreen();
         StartCoroutine(LoadData());
     }
-    
+
+   
     
     private Sprite _sprite;
     IEnumerator LoadData()
@@ -79,6 +81,12 @@ public class LoadScript : MonoBehaviour
             string newjson = JsonUtility.ToJson(settings);
             File.WriteAllText(settingsPath, newjson);
         }
+    }
+    
+    public static void SaveJsonCounter(CounterScript.Settings counter)
+    {
+        string newjson = JsonUtility.ToJson(counter);
+        File.WriteAllText(settingsPathStatic, newjson);
     }
 
     void LoadJsonMessage()
